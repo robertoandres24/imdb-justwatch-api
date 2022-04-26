@@ -1,15 +1,17 @@
-const express = require("express");
-const router = express.Router();
+const express = require('express');
 
-router.get("/", async (req, res) => {
+const router = express.Router();
+require('./imdbScrapper');
+
+router.get('/', async (req, res) => {
   try {
-    res.json({
+    return res.json({
       status: 200,
-      message: "Get data has successfully",
+      message: 'Get data has successfully',
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).send("Server error");
+    return res.status(500).send('Server error');
   }
 });
 
