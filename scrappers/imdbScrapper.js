@@ -45,7 +45,7 @@ async function run() {
     const imdbList = await getImdbList(browser);
     return imdbList;
   } catch (error) {
-    return error;
+    return JSON.stringify(error);
   }
 }
 

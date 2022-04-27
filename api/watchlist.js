@@ -5,11 +5,11 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
   try {
-    const imdbList = await imdbScrapper.run();
     return res.json({
       status: 200,
       message: 'Get data has successfully',
-      data: imdbList,
+      data: await imdbScrapper.run(),
+      foo: 'bar',
     });
   } catch (error) {
     console.error(error);
