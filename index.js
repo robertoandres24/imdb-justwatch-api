@@ -1,15 +1,23 @@
 const express = require('express');
-
-const app = express();
-const port = 3000;
 const watchlist = require('./api/watchlist');
+const imdbScrapper = require('./scrappers/imdbScrapper');
+const { imdbList } = require('./store');
 
-app.get('/', (req, res) => {
-  res.send('Hello new World');
-});
+imdbScrapper.run()
+  .then((list) => {
+    imdbList.push(...list);
+    console.log('Imdb List: ', imdbList);
+    const app = express();
+    const port = 3000;
 
-app.use('/api/watchlist', watchlist);
+    app.get('/', (req, res) => {
+      res.send('Hello new World');
+    });
 
-app.listen(port, () => {
-  console.log(`Example app listening on http://localhost:${port}`);
-});
+    app.use('/api/watchlist', watchlist);
+
+    app.listen(port, () => {
+      console.log(`Example app listening on http://localhost:${port}`);
+    });
+  })
+  .catch((e) => console.log('Error Trying to get Imdb List: ', e));
