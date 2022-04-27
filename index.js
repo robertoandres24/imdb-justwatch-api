@@ -3,11 +3,12 @@ const watchlist = require('./api/watchlist');
 const imdbScrapper = require('./scrappers/imdbScrapper');
 const { imdbList } = require('./store');
 
+const app = express();
+
 imdbScrapper.run()
   .then((list) => {
     imdbList.push(...list);
     console.log('Imdb List: ', imdbList);
-    const app = express();
     const port = 3000;
 
     app.get('/', (req, res) => {
@@ -21,3 +22,5 @@ imdbScrapper.run()
     });
   })
   .catch((e) => console.log('Error Trying to get Imdb List: ', e));
+
+module.exports = app;
