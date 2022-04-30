@@ -1,5 +1,5 @@
 const express = require('express');
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
 const chrome = require('chrome-aws-lambda');
 
 const router = express.Router();
