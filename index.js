@@ -7,6 +7,7 @@ const port = 3000;
 app.get('/', async (req, res) => {
   res.send({
     hello: 'Hello new World',
+    foo: 'bar',
   });
 });
 

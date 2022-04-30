@@ -39,7 +39,7 @@ router.get('/', async (req, res) => {
   try {
     return res.json({
       status: 200,
-      message: 'Get data has successfully',
+      message: 'Get itemIds',
       data: itemIds,
     });
   } catch (error) {
