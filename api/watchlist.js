@@ -1,21 +1,46 @@
-const { default: axios } = require('axios');
 const express = require('express');
-// const imdbScrapper = require('../scrappers/imdbScrapper');
+const puppeteer = require('puppeteer');
+const chrome = require('chrome-aws-lambda');
 
 const router = express.Router();
 
-async function getTodo() {
-  return axios.get('https://jsonplaceholder.typicode.com/todos/1');
+function puppeteerLogger(page) {
+  page.on('console', (msg) => console.log('PAGE LOG:', msg.text()));
+}
+
+async function init() {
+  const browser = await puppeteer.launch(
+    process.env.NODE_ENV === 'production'
+      ? {
+        args: chrome.args,
+        executablePath: await chrome.executablePath,
+        headless: chrome.headless,
+      }
+      : {},
+  );
+  const imdbUrl = 'https://www.imdb.com/user/ur60351403/watchlist';
+  // const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  await page.goto(imdbUrl);
+  puppeteerLogger(page);
+  const itemIds = await page.evaluate(async () => {
+    const { items } = window.IMDbReactInitialState[0].list;
+    console.log(items[0]);
+
+    return items.map((item) => item.const);
+  });
+  console.log(itemIds);
+  await browser.close();
+  return itemIds;
 }
 
 router.get('/', async (req, res) => {
+  const itemIds = await init();
   try {
-    const { data: todo } = await getTodo();
-    console.log(todo);
     return res.json({
       status: 200,
       message: 'Get data has successfully',
-      data: todo,
+      data: itemIds,
     });
   } catch (error) {
     console.error(error);
