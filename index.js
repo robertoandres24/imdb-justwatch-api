@@ -10,6 +10,9 @@ app.get('/', (req, res) => {
 
 app.use('/api/watchlist', watchlist);
 
+console.log('AWS_LAMBDA_FUNCTION_VERSION');
+console.log(process.env.AWS_LAMBDA_FUNCTION_VERSION);
+
 app.listen(port, () => {
   console.log(`Example app listening on http://localhost:${port}`);
 });
