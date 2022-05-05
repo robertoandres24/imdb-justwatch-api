@@ -1,25 +1,29 @@
+// in localhost use puppeteer, in prod puppeteer-core
+const puppeteer = require('puppeteer');
+const chrome = require('chrome-aws-lambda');
 const { puppeteerLogger } = require('../utils');
+const ImdbItem = require('../db/models/ImdbItem');
+
+async function saveItem(itemId) {
+  const item = await ImdbItem.findOne({ id: itemId });
+  if (item) {
+    return item.id;
+  }
+  const newItem = new ImdbItem({ id: itemId });
+  await newItem.save();
+  return newItem.id;
+}
 
 async function initPuppeteer() {
-  /* eslint-disable global-require */
-  let chrome = {};
-  let puppeteer;
-
-  if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
-  // running on the Vercel platform.
-    chrome = require('chrome-aws-lambda');
-    puppeteer = require('puppeteer-core');
-  } else {
-  // running locally.
-  // eslint-disable-next-line import/no-extraneous-dependencies
-    puppeteer = require('puppeteer');
-  }
-  const browser = await puppeteer.launch({
-    defaultViewport: chrome.defaultViewport,
-    executablePath: await chrome.executablePath,
-    headless: true,
-    ignoreHTTPSErrors: true,
-  });
+  const browser = await puppeteer.launch(
+    process.env.NODE_ENV === 'production'
+      ? {
+        args: chrome.args,
+        executablePath: await chrome.executablePath,
+        headless: chrome.headless,
+      }
+      : {},
+  );
   return browser;
 }
 
@@ -32,14 +36,15 @@ async function getImdbList(browser) {
   const itemIds = await page.evaluate(async () => {
     const { items } = window.IMDbReactInitialState[0].list;
     console.log(items[0]);
-
     return items.map((item) => item.const);
   });
+  console.log(itemIds);
+  const items = await Promise.all(itemIds.map((itemId) => saveItem(itemId)));
   await browser.close();
-  return itemIds;
+  return items;
 }
 
-async function run() {
+async function runImdbScrapper() {
   try {
     const browser = await initPuppeteer();
     const imdbList = await getImdbList(browser);
@@ -49,4 +54,4 @@ async function run() {
   }
 }
 
-module.exports = { run };
+module.exports = { runImdbScrapper };

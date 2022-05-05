@@ -1,50 +1,47 @@
 const express = require('express');
-const puppeteer = require('puppeteer-core');
-const chrome = require('chrome-aws-lambda');
+const ImdbItem = require('../db/models/ImdbItem');
 
 const router = express.Router();
 
-function puppeteerLogger(page) {
-  page.on('console', (msg) => console.log('PAGE LOG:', msg.text()));
-}
-
-async function init() {
-  const browser = await puppeteer.launch(
-    process.env.NODE_ENV === 'production'
-      ? {
-        args: chrome.args,
-        executablePath: await chrome.executablePath,
-        headless: chrome.headless,
-      }
-      : {},
-  );
-  const imdbUrl = 'https://www.imdb.com/user/ur60351403/watchlist';
-  // const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  await page.goto(imdbUrl);
-  puppeteerLogger(page);
-  const itemIds = await page.evaluate(async () => {
-    const { items } = window.IMDbReactInitialState[0].list;
-    console.log(items[0]);
-
-    return items.map((item) => item.const);
-  });
-  console.log(itemIds);
-  await browser.close();
-  return itemIds;
-}
-
 router.get('/', async (req, res) => {
-  const itemIds = await init();
+  const ImdbItemList = await (await ImdbItem.find()).map((item) => item.id);
   try {
     return res.json({
       status: 200,
       message: 'Get itemIds',
-      data: itemIds,
+      data: ImdbItemList,
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).send('Server error');
+    return res.status(500).send('error getting itemIds');
+  }
+});
+router.post('/', async (req, res) => {
+  try {
+    const item = new ImdbItem({
+      id: 'jhg987987987',
+    });
+    await item.save();
+    return res.json({
+      status: 200,
+      message: 'item saved',
+      data: item,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('Error saving item');
+  }
+});
+router.delete('/', async (req, res) => {
+  try {
+    await ImdbItem.collection.drop();
+    return res.json({
+      status: 200,
+      message: 'all  items deleted',
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('Error deleting items');
   }
 });
 
