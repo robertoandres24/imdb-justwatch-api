@@ -7,8 +7,7 @@ router.get('/', async (req, res) => {
   const ImdbItemList = await (await ImdbItem.find()).map((item) => item.id);
   try {
     return res.json({
-      status: 200,
-      message: 'Get itemIds',
+      total: ImdbItemList.length,
       data: ImdbItemList,
     });
   } catch (error) {

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 // const { MONGODB_URI } = process.env;
-const MONGODB_URI = 'mongodb://127.0.0.1:27017';
+const { MONGODB_URI } = process.env;
 if (!MONGODB_URI) {
   throw new Error(
     'Please define the MONGODB_URI environment variable inside .env.local',
