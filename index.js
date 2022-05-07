@@ -30,7 +30,6 @@ dbConnect()
     app.listen(port, () => {
       console.log(`Example app listening on http://localhost:${port}`);
     });
+    module.exports = app;
   })
   .catch((e) => console.log(e));
-
-module.exports = app;
