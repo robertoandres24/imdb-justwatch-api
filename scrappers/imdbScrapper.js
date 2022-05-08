@@ -1,6 +1,5 @@
 // in localhost use puppeteer, in prod puppeteer-core
-const puppeteer = require('puppeteer-core');
-const chrome = require('chrome-aws-lambda');
+const puppeteer = require('puppeteer');
 const { puppeteerLogger } = require('../utils');
 const ImdbItem = require('../db/models/ImdbItem');
 
@@ -15,15 +14,7 @@ async function saveItem(itemId) {
 }
 
 async function initPuppeteer() {
-  const browser = await puppeteer.launch(
-    process.env.NODE_ENV === 'production'
-      ? {
-        args: chrome.args,
-        executablePath: await chrome.executablePath,
-        headless: chrome.headless,
-      }
-      : {},
-  );
+  const browser = await puppeteer.launch({});
   return browser;
 }
 
