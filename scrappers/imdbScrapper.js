@@ -14,7 +14,7 @@ async function saveItem(itemId) {
 }
 
 async function initPuppeteer() {
-  const browser = await puppeteer.launch({});
+  const browser = await puppeteer.launch();
   return browser;
 }
 
@@ -38,6 +38,7 @@ async function getImdbList(browser) {
 async function runImdbScrapper() {
   try {
     const browser = await initPuppeteer();
+    console.log('🚀 ~ file: imdbScrapper.js ~ line 41 ~ runImdbScrapper ~ browser', browser);
     const imdbList = await getImdbList(browser);
     return imdbList;
   } catch (error) {
