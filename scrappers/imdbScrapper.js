@@ -1,5 +1,5 @@
 // in localhost use puppeteer, in prod puppeteer-core
-const puppeteer = require('puppeteer-core');
+const puppeteer = require('puppeteer');
 const chrome = require('chrome-aws-lambda');
 const { puppeteerLogger } = require('../utils');
 const ImdbItem = require('../db/models/ImdbItem');
