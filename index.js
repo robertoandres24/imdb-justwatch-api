@@ -15,14 +15,17 @@ dbConnect()
     console.log('process.env.NODE_ENV');
     console.log(process.env.NODE_ENV);
     console.log('Srapping ....');
+    const { data: todo } = await axios.get('https://jsonplaceholder.typicode.com/todos/1');
+    console.log('🚀 ~ file: index.js ~ line 19 ~ .then ~ todo', todo);
+
     // const imdbItemIds = await runImdbScrapper();
     // console.log('🚀 ~ file: index.js ~ line 12 ~ .then ~ imdbItemIds', imdbItemIds);
     app.get('/', async (req, res) => {
       // const imdbItems = await (await ImdbItem.find()).map((item) => item.id);
-      const { data: todo, status } = await axios.get('https://jsonplaceholder.typicode.com/todos/1');
+      const { data: theTodo, status } = await axios.get('https://jsonplaceholder.typicode.com/todos/1');
       res.send({
         hello: 'world',
-        todo,
+        theTodo,
         status,
       });
     });
