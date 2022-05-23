@@ -19,6 +19,7 @@ dbConnect()
     const list = await runImdbScrapper();
     app.get('/', async (req, res) => {
       res.json({
+        total: list.length,
         list,
       });
     });

@@ -22,7 +22,8 @@
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "mongoose": "^6.3.1",
-    "puppeteer": "^14.1.0"
+    "puppeteer": "^14.1.0",
+    "puppeteer-autoscroll-down": "^1.1.1"
   },
   "devDependencies": {
     "eslint": "^8.14.0",
