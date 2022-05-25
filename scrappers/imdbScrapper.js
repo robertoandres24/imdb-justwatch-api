@@ -3,6 +3,7 @@ const { scrollPageToBottom } = require('puppeteer-autoscroll-down');
 
 const imdbUrl = 'https://www.imdb.com/user/ur60351403/watchlist';
 const lastPosition = [];
+const DEBUG = process.env.DEBUG === 'true' || false;
 
 async function loadMoreProgramatically(page) {
   lastPosition.push(await scrollPageToBottom(page, {
@@ -19,7 +20,7 @@ async function loadMoreProgramatically(page) {
 async function getImdbList() {
   try {
     const browser = await puppeteer.launch({
-      devtools: true,
+      devtools: DEBUG,
       args: ['--window-size=1920,1080'],
       defaultViewport: null,
     });
@@ -41,13 +42,4 @@ async function getImdbList() {
   }
 }
 
-async function runImdbScrapper() {
-  try {
-    const imdbList = await getImdbList();
-    return imdbList;
-  } catch (error) {
-    return JSON.stringify(error);
-  }
-}
-
-module.exports = { runImdbScrapper };
+module.exports = { getImdbList };

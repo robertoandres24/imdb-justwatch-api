@@ -3,8 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const watchlist = require('./api/watchlist');
 const dbConnect = require('./db/dbConnect');
-
-const { runImdbScrapper } = require('./scrappers/imdbScrapper');
+const DBService = require('./db/DBService');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -14,13 +13,11 @@ dbConnect()
     console.log('Database connected!');
     console.log('process.env.NODE_ENV');
     console.log(process.env.NODE_ENV);
-    console.log('Srapping ....');
 
-    const list = await runImdbScrapper();
     app.get('/', async (req, res) => {
       res.json({
-        total: list.length,
-        list,
+        hello: 'world',
+        item: await DBService.findOne('tt1498569'),
       });
     });
 

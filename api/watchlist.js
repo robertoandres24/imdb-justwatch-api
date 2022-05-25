@@ -1,14 +1,16 @@
 const express = require('express');
 const ImdbItem = require('../db/models/ImdbItem');
+const { runImdbScrapper } = require('../scrappers/imdbScrapper');
 
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-  const ImdbItemList = await (await ImdbItem.find()).map((item) => item.id);
+  console.log('Srapping ....');
+  const list = await runImdbScrapper();
   try {
     return res.json({
-      total: ImdbItemList.length,
-      data: ImdbItemList,
+      total: list.length,
+      data: list,
     });
   } catch (error) {
     console.error(error);
