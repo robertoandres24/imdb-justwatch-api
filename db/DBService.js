@@ -1,12 +1,23 @@
 const ImdbItem = require('./models/ImdbItem');
 
-const DBService = {
-  async getAll() {
-    return (await ImdbItem.find()).map((item) => item.id);
-  },
-  async findOne(id) {
-    return ImdbItem.findOne({ id });
-  },
-};
+async function getAll() {
+  return ImdbItem.find();
+}
+async function findOne(id) {
+  return ImdbItem.findOne({ id });
+}
+async function save(item) {
+  const newItem = new ImdbItem(item);
+  await newItem.save();
+}
+async function saveImdList(list) {
+  const promisesList = list.map((item) => save(item));
+  return Promise.all(promisesList);
+}
+async function removeAll() {
+  return ImdbItem.deleteMany({});
+}
 
-module.exports = DBService;
+module.exports = {
+  getAll, findOne, save, saveImdList, removeAll,
+};

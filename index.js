@@ -8,6 +8,16 @@ const DBService = require('./db/DBService');
 const app = express();
 const port = process.env.PORT || 3000;
 
+/**
+ * TODO:
+ * - try to get if item is Movie or TV-show
+ * - remove all special characters from titles:
+ *    const str = "abc's test#s";
+      console.log(str.replace(/[^a-zA-Z ]/g, ""));
+   - Go Justwatch Url like this:
+      https://www.justwatch.com/us/movie/schindlers-list
+ */
+
 dbConnect()
   .then(async () => {
     console.log('Database connected!');
@@ -17,7 +27,7 @@ dbConnect()
     app.get('/', async (req, res) => {
       res.json({
         hello: 'world',
-        item: await DBService.findOne('tt1498569'),
+        list: await DBService.getAll(),
       });
     });
 
