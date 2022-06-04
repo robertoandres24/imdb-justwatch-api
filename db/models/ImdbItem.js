@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const schema = mongoose.Schema({
   title: String,
-  details: String,
+  tvShow: Boolean,
 });
 
 module.exports = mongoose.model('ImdbItem', schema);

@@ -1,23 +1,34 @@
 const ImdbItem = require('./models/ImdbItem');
 
+const justWatchBaseUrl = 'https://www.justwatch.com/us';
 function cleanTitle(title) {
   return title.replace(/[^a-zA-Z0-9 ]/gm, '')
     .replace(/ /gm, '-')
     .toLowerCase();
 }
+function isTvShow(details) {
+  return details.toLowerCase().includes('tv series');
+}
+function createJustWatchUrl(item) {
+  if (item.tvShow) {
+    return `${justWatchBaseUrl}/tv-show/${item.title}`;
+  }
+  return `${justWatchBaseUrl}/movie/${item.title}`;
+}
 /**
  *
- * @param {{title: string, details: string}[]} list An array of Imdb Items
- * @returns same properties, but sanitized
+ * @param {{title: string, tvShow: boolean}[]} list An array of Imdb Items
+ * @returns ImdbItem[]
  */
 function sanitizeList(list) {
   return list.map((item) => ({
-    details: item.details,
+    tvShow: isTvShow(item.details),
     title: cleanTitle(item.title),
   }));
 }
 async function getAll() {
-  return ImdbItem.find();
+  const imdbList = await ImdbItem.find();
+  return imdbList.map((item) => createJustWatchUrl(item));
 }
 async function findOne(id) {
   return ImdbItem.findOne({ id });

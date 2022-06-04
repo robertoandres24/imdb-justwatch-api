@@ -10,12 +10,13 @@ const port = process.env.PORT || 3000;
 
 /**
  * TODO:
- * - try to get if item is Movie or TV-show
- * - remove all special characters from titles:
- *    const str = "abc's test#s";
-      console.log(str.replace(/[^a-zA-Z ]/g, ""));
-   - Go Justwatch Url like this:
-      https://www.justwatch.com/us/movie/schindlers-list
+ * [x] try to get if item is Movie or TV-show
+ * [x] remove all special characters from titles:
+       const str = "abc's test#s";
+       console.log(str.replace(/[^a-zA-Z ]/g, ""));
+ * [x] Go Justwatch Url like this:
+       https://www.justwatch.com/us/movie/schindlers-list
+ * [ ] clean characters with accents e.g. Amélie => amelie
  */
 
 dbConnect()

@@ -1,6 +1,5 @@
 const express = require('express');
 const DBService = require('../db/DBService');
-const ImdbItem = require('../db/models/ImdbItem');
 const { getImdbList, getListCount } = require('../scrappers/imdbScrapper');
 
 const router = express.Router();
@@ -52,32 +51,19 @@ router.get('/db', async (req, res) => {
     return res.status(500).send('error getting itemIds');
   }
 });
-router.post('/', async (req, res) => {
+router.get('/test', async (req, res) => {
   try {
-    const item = new ImdbItem({
-      id: 'jhg987987987',
-    });
-    await item.save();
+    const DBList = await DBService.getAll();
+    await DBService.removeAll();
+    await DBService.saveImdList(DBList);
+    const list = await DBService.getAll();
     return res.json({
-      status: 200,
-      message: 'item saved',
-      data: item,
+      total: list.length,
+      data: list,
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).send('Error saving item');
-  }
-});
-router.delete('/', async (req, res) => {
-  try {
-    await ImdbItem.collection.drop();
-    return res.json({
-      status: 200,
-      message: 'all  items deleted',
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).send('Error deleting items');
+    return res.status(500).send('error getting itemIds');
   }
 });
 
