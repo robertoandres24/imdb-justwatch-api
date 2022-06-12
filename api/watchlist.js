@@ -51,19 +51,15 @@ router.get('/db', async (req, res) => {
     return res.status(500).send('error getting itemIds');
   }
 });
-router.get('/test', async (req, res) => {
+router.get('/remove', async (req, res) => {
   try {
-    const DBList = await DBService.getAll();
     await DBService.removeAll();
-    await DBService.saveImdList(DBList);
-    const list = await DBService.getAll();
     return res.json({
-      total: list.length,
-      data: list,
+      status: 'removed all collection ok',
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).send('error getting itemIds');
+    return res.status(500).send('error removing all collection');
   }
 });
 
