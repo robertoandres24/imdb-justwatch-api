@@ -21,7 +21,7 @@ async function getImdbList() {
   try {
     const browser = await puppeteer.launch({
       devtools: CHROME_DEBUG,
-      args: ['--window-size=1920,1080'],
+      args: ['--window-size=1920,1080', '--lang=es-ES'],
       defaultViewport: null,
     });
     const page = await browser.newPage();

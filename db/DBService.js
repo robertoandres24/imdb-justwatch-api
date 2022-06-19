@@ -1,27 +1,22 @@
+const { justWatchBaseUrl, movie, tvShow } = require('../utils/constants');
 const ImdbItem = require('./models/ImdbItem');
 
-const justWatchBaseUrl = 'https://www.justwatch.com/us';
 function cleanTitle(str) {
   return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '') // Remove accents
-    .replace(/[^a-zA-Z0-9 ]/gm, '')
-    .replace(/ /gm, '-')
+    .replace(/([^\w]+|\s+)/g, '-') // Replace space and other characters by hyphen
+    .replace(/--+/g, '-') // Replaces multiple hyphens by one hyphen
+    .replace(/(^-+|-+$)/g, '') // Remove extra hyphens from beginning or end of the string
     .toLowerCase();
 }
-// function cleanTitle(str) {
-//   return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '') // Remove accents
-//     .replace(/([^\w]+|\s+)/g, '-') // Replace space and other characters by hyphen
-//     .replace(/\-\-+/g, '-') // Replaces multiple hyphens by one hyphen
-//     .replace(/(^-+|-+$)/g, '') // Remove extra hyphens from beginning or end of the string
-//     .toLowerCase();
-// }
+
 function isTvShow(details) {
   return details.toLowerCase().includes('tv series');
 }
 function createJustWatchUrl(item) {
   if (item.tvShow) {
-    return `${justWatchBaseUrl}/tv-show/${item.title}`;
+    return `${justWatchBaseUrl}/${tvShow}/${item.title}`;
   }
-  return `${justWatchBaseUrl}/movie/${item.title}`;
+  return `${justWatchBaseUrl}/${movie}/${item.title}`;
 }
 /**
  *
