@@ -1,9 +1,9 @@
 require('dotenv').config();
 
 const express = require('express');
-const watchlist = require('./api/watchlist');
+const watchlist = require('./routes/watchlist');
 const dbConnect = require('./db/dbConnect');
-const DBService = require('./db/DBService');
+const { imdbWatchlistService } = require('./services');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -17,7 +17,7 @@ dbConnect()
     app.get('/', async (req, res) => {
       res.json({
         hello: 'world',
-        list: await DBService.getAll(),
+        list: await imdbWatchlistService.getAll(),
       });
     });
 

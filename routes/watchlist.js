@@ -1,16 +1,15 @@
 const express = require('express');
-const DBService = require('../db/DBService');
-const { getImdbList, getListCount } = require('../scrappers/imdbScrapper');
+const imdbScrapper = require('../scrappers/imdbScrapper');
+const { imdbWatchlistService } = require('../services');
 
 const router = express.Router();
-
 router.get('/scrapper', async (req, res) => {
   try {
     console.log('Srapping ....');
-    await DBService.removeAll();
-    const list = await getImdbList();
-    await DBService.saveImdList(list);
-    const DBList = await DBService.getAll();
+    await imdbWatchlistService.removeAll();
+    const list = await imdbScrapper.getImdbList();
+    await imdbWatchlistService.saveImdList(list);
+    const DBList = await imdbWatchlistService.getAll();
     return res.json({
       total: DBList.length,
       data: DBList,
@@ -22,8 +21,8 @@ router.get('/scrapper', async (req, res) => {
 });
 router.get('/isInSync', async (req, res) => {
   try {
-    const listCount = await getListCount();
-    const DBList = await DBService.getAll();
+    const listCount = await imdbScrapper.getListCount();
+    const DBList = await imdbWatchlistService.getAll();
     if (listCount === DBList.length) {
       return res.json({
         isInSync: true,
@@ -41,7 +40,7 @@ router.get('/isInSync', async (req, res) => {
 });
 router.get('/db', async (req, res) => {
   try {
-    const DBList = await DBService.getAll();
+    const DBList = await imdbWatchlistService.getAll();
     return res.json({
       total: DBList.length,
       data: DBList,
@@ -53,7 +52,7 @@ router.get('/db', async (req, res) => {
 });
 router.get('/remove', async (req, res) => {
   try {
-    await DBService.removeAll();
+    await imdbWatchlistService.removeAll();
     return res.json({
       status: 'removed all collection ok',
     });

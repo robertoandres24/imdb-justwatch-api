@@ -1,5 +1,5 @@
 const { justWatchBaseUrl, movie, tvShow } = require('../utils/constants');
-const ImdbItem = require('./models/ImdbItem');
+const ImdbItem = require('../db/models/ImdbItem');
 
 function cleanTitle(str) {
   return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '') // Remove accents
