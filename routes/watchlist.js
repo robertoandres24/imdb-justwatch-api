@@ -2,6 +2,29 @@ const express = require('express');
 const { imdbDbService, imdbHttpService } = require('../services/imdb');
 
 const router = express.Router();
+
+/**
+ * @swagger
+ * /api/watchlist:
+ *  get:
+ *    description: Get All Imdb Items from DB
+ *    responses:
+ *      200:
+ *        description: Success
+ */
+router.get('/', async (req, res) => {
+  try {
+    const DBList = await imdbDbService.getAll();
+    return res.json({
+      total: DBList.length,
+      data: DBList,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('error getting itemIds');
+  }
+});
+
 router.get('/scrapper', async (req, res) => {
   try {
     console.log('Srapping ....');
@@ -37,19 +60,8 @@ router.get('/isInSync', async (req, res) => {
     return res.status(500).send('error getting inSync');
   }
 });
-router.get('/db', async (req, res) => {
-  try {
-    const DBList = await imdbDbService.getAll();
-    return res.json({
-      total: DBList.length,
-      data: DBList,
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).send('error getting itemIds');
-  }
-});
-router.get('/remove', async (req, res) => {
+
+router.delete('/', async (req, res) => {
   try {
     await imdbDbService.removeAll();
     return res.json({

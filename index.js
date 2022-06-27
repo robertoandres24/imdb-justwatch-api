@@ -1,9 +1,9 @@
 require('dotenv').config();
 
 const express = require('express');
-const watchlist = require('./routes/watchlist');
+
+const apiRoutes = require('./routes');
 const dbConnect = require('./db/dbConnect');
-const { imdbDbService } = require('./services/imdb');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -14,14 +14,7 @@ dbConnect()
     console.log('process.env.NODE_ENV');
     console.log(process.env.NODE_ENV);
 
-    app.get('/', async (req, res) => {
-      res.json({
-        hello: 'world',
-        list: await imdbDbService.getAll(),
-      });
-    });
-
-    app.use('/api/watchlist', watchlist);
+    app.use('/api', apiRoutes);
 
     app.listen(port, () => {
       console.log(`Example app listening on http://localhost:${port}`);
