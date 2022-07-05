@@ -1,9 +1,8 @@
 const express = require('express');
 const watchlistRouter = require('./watchlist');
 
-const apiRouter = express.Router();
-require('../utils/swagger')(apiRouter);
+const router = express.Router();
 
-apiRouter.use('/watchlist', watchlistRouter);
+router.use('/watchlist', watchlistRouter);
 
-module.exports = apiRouter;
+module.exports = router;

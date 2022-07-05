@@ -7,7 +7,8 @@ const router = express.Router();
  * @swagger
  * /api/watchlist:
  *  get:
- *    description: Get All Imdb Items from DB
+ *    tags: [Imdb Watchlist]
+ *    description: Get All Imdb Items saved on DB
  *    responses:
  *      200:
  *        description: Success
@@ -25,7 +26,17 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/scrapper', async (req, res) => {
+/**
+ * @swagger
+ * /api/watchlist/scrapper:
+ *  post:
+ *    tags: [Imdb Watchlist]
+ *    description: Scrapping all Imdb Items from the Web
+ *    responses:
+ *      200:
+ *        description: Success
+ */
+router.post('/scrapper', async (req, res) => {
   try {
     console.log('Srapping ....');
     await imdbDbService.removeAll();
@@ -41,6 +52,17 @@ router.get('/scrapper', async (req, res) => {
     return res.status(500).send('error getting itemIds');
   }
 });
+
+/**
+ * @swagger
+ * /api/watchlist/isInSync:
+ *  get:
+ *    tags: [Imdb Watchlist]
+ *    description: Returns a Boolean value, if DB isInSync with Imdb Watchlist web or not.
+ *    responses:
+ *      200:
+ *        description: Success
+ */
 router.get('/isInSync', async (req, res) => {
   try {
     const listCount = await imdbHttpService.getListCount();
@@ -61,6 +83,16 @@ router.get('/isInSync', async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/watchlist:
+ *  delete:
+ *    tags: [Imdb Watchlist]
+ *    description: Delete all Imdb Items from DB
+ *    responses:
+ *      200:
+ *        description: Success
+ */
 router.delete('/', async (req, res) => {
   try {
     await imdbDbService.removeAll();
