@@ -4,7 +4,6 @@ const express = require('express');
 
 const apiRoutes = require('./routes');
 const dbConnect = require('./db/dbConnect');
-const { serve, setup } = require('./utils/swagger');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -14,8 +13,6 @@ dbConnect()
     console.log('Database connected!');
     console.log('process.env.NODE_ENV');
     console.log(process.env.NODE_ENV);
-
-    app.use('/api-docs', serve, setup());
 
     app.use('/api', apiRoutes);
 
