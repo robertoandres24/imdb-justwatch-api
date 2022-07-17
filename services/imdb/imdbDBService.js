@@ -50,5 +50,5 @@ async function removeAll() {
 }
 
 module.exports = {
-  getAll, findOne, saveImdList, removeAll,
+  getAll, findOne, saveImdList, removeAll, createJustWatchUrl, cleanTitle, isTvShow, sanitizeList,
 };
